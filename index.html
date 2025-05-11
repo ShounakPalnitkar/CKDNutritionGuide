@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CKD Nutrition Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1976D2;
+            --food-green: #4CAF50;
+            --positive-orange: #FFA726;
+            --background: #E3F2FD;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 2rem;
+            background: var(--background);
+        }
+
+        .brochure-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 2rem;
+            min-height: 70vh;
+        }
+
+        .section {
+            display: none;
+            padding: 2rem;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .nav-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .download-btn {
+            background: var(--food-green);
+            color: white;
+        }
+
+        .diet-guide {
+            border: 2px solid var(--food-green);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        .food-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .food-table th, .food-table td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .food-table th {
+            background-color: var(--food-green);
+            color: white;
+        }
+
+        .weight-guidelines {
+            border: 2px solid var(--primary-blue);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        .positive-section {
+            background: #FFF3E0;
+            padding: 2rem;
+            border-left: 5px solid var(--positive-orange);
+            margin: 2rem 0;
+        }
+
+        .chart-container {
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .disclaimer {
+            color: #D32F2F;
+            text-align: center;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        .star-list li {
+            list-style: none;
+            margin: 1rem 0;
+            padding-left: 2rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23FFA726" d="M12 0l3.09 6.26L22 7.27l-5 4.87 1.18 6.88L12 16l-6.18 3.02L7 12.14 2 7.27l6.91-1.01L12 0z"/></svg>') left center no-repeat;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="brochure-container">
+        <!-- Start Page -->
+        <div id="start-page" class="section active">
+            <h1 style="color: var(--primary-blue); text-align: center;">
+                Chronic Kidney Disease Food Guide
+            </h1>
+            <p class="disclaimer">This is just for information. Always follow your doctor's advice.</p>
+            <div class="nav-buttons">
+                <button class="primary-btn" onclick="showSection('diet-guide')">Get Started</button>
+            </div>
+        </div>
+
+        <!-- Dietary Guidelines -->
+        <div id="diet-guide" class="section">
+            <div class="diet-guide">
+                <h2>Detailed Dietary Report</h2>
+                <table class="food-table">
+                    <tr>
+                        <th>Category</th>
+                        <th>Recommended Foods</th>
+                        <th>Foods to Avoid</th>
+                        <th>Key Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Proteins</td>
+                        <td>Egg whites, Skinless chicken, Fish</td>
+                        <td>Red meat, Bacon, Sausages</td>
+                        <td>Limit to 0.6-0.8g/kg body weight</td>
+                    </tr>
+                    <tr>
+                        <td>Vegetables</td>
+                        <td>Cabbage, Cauliflower, Bell peppers</td>
+                        <td>Potatoes, Spinach, Tomatoes</td>
+                        <td>Limit high-potassium vegetables</td>
+                    </tr>
+                    <tr>
+                        <td>Fruits</td>
+                        <td>Apples, Berries, Pineapple</td>
+                        <td>Bananas, Oranges, Kiwi</td>
+                        <td>Choose low-potassium options</td>
+                    </tr>
+                    <tr>
+                        <td>Dairy</td>
+                        <td>Non-dairy alternatives</td>
+                        <td>Milk, Cheese, Yogurt</td>
+                        <td>High in phosphorus</td>
+                    </tr>
+                    <tr>
+                        <td>Fluids</td>
+                        <td>Water (as recommended)</td>
+                        <td>Sodas, Alcohol</td>
+                        <td>Limit to 1.5-2L/day</td>
+                    </tr>
+                    <tr>
+                        <td>Spices</td>
+                        <td>Herbs, Lemon juice</td>
+                        <td>Salt, MSG</td>
+                        <td>Limit sodium <2000mg/day</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="nav-buttons">
+                <button class="primary-btn" onclick="showSection('start-page')">Back</button>
+                <button class="download-btn" onclick="generatePDF()">Download Full Report</button>
+                <button class="primary-btn" onclick="showSection('visualization')">Next</button>
+            </div>
+        </div>
+
+        <!-- Visualizations Page -->
+        <div id="visualization" class="section">
+            <div class="chart-container">
+                <h2>Stage-wise Food Distribution</h2>
+                <select id="stageSelector" onchange="updateChart()">
+                    <option value="1">Stage 1</option>
+                    <option value="2">Stage 2</option>
+                    <option value="3">Stage 3</option>
+                    <option value="4">Stage 4</option>
+                    <option value="5">Stage 5</option>
+                </select>
+                <canvas id="pieChart"></canvas>
+            </div>
+
+            <div class="weight-guidelines">
+                <h3>📏 Healthy Weight Guidelines</h3>
+                <p>Maintain a BMI between 18.5 - 24.9 for optimal kidney health:</p>
+                <table class="food-table">
+                    <tr>
+                        <th>Height (cm)</th>
+                        <th>Healthy Weight Range (kg)</th>
+                        <th>Key Notes</th>
+                    </tr>
+                    <tr>
+                        <td>150 cm</td>
+                        <td>41.6 - 56.0 kg</td>
+                        <td>Ideal for better kidney function</td>
+                    </tr>
+                    <tr>
+                        <td>160 cm</td>
+                        <td>47.4 - 63.7 kg</td>
+                        <td>Maintains stable blood pressure</td>
+                    </tr>
+                    <tr>
+                        <td>170 cm</td>
+                        <td>53.5 - 72.0 kg</td>
+                        <td>Reduces strain on kidneys</td>
+                    </tr>
+                    <tr>
+                        <td>180 cm</td>
+                        <td>60.0 - 80.7 kg</td>
+                        <td>Optimal for overall health</td>
+                    </tr>
+                    <tr>
+                        <td>190 cm</td>
+                        <td>66.8 - 90.0 kg</td>
+                        <td>Supports renal system</td>
+                    </tr>
+                </table>
+                <p class="disclaimer">* Based on BMI calculations (18.5-24.9 kg/m²)</p>
+            </div>
+
+            <div class="positive-section">
+                <h3>🌟 Affirmations</h3>
+                <ul class="star-list">
+                    <li>To support yourself, maintain your health</li>
+                    <li>Health is the golden key for prosperity</li>
+                    <li>Believe that you can do it</li>
+                    <li>Work hard for your health</li>
+                    <li>Eat properly for healthy living</li>
+                </ul>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="primary-btn" onclick="showSection('diet-guide')">Back</button>
+                <button class="download-btn" onclick="generatePDF()">Download Full Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Chart.js and plugins
+        Chart.register(ChartDataLabels);
+        window.jspdf = window.jspdf;
+
+        // Chart configuration
+        let pieChart = null;
+        const stageData = {
+            1: {
+                title: "Stage 1 (Mild Kidney Damage)",
+                labels: ['Proteins 30%', 'Vegetables 40%', 'Fruits 20%', 'Grains 10%'],
+                data: [30,40,20,10],
+                description: "Normal kidney function with some structural damage. Focus on maintaining kidney health through diet."
+            },
+            2: {
+                title: "Stage 2 (Mild CKD)",
+                labels: ['Proteins 25%', 'Vegetables 45%', 'Fruits 15%', 'Grains 15%'],
+                data: [25,45,15,15],
+                description: "Mildly reduced kidney function. Monitor protein intake and maintain hydration."
+            },
+            3: {
+                title: "Stage 3 (Moderate CKD)",
+                labels: ['Proteins 20%', 'Vegetables 50%', 'Fruits 10%', 'Grains 20%'],
+                data: [20,50,10,20],
+                description: "Moderate kidney damage. Strict control of sodium, potassium, and phosphorus."
+            },
+            4: {
+                title: "Stage 4 (Severe CKD)",
+                labels: ['Proteins 15%', 'Vegetables 55%', 'Fruits 5%', 'Grains 25%'],
+                data: [15,55,5,25],
+                description: "Severely reduced kidney function. Prepare for potential dialysis."
+            },
+            5: {
+                title: "Stage 5 (Kidney Failure)",
+                labels: ['Proteins 10%', 'Vegetables 60%', 'Grains 30%'],
+                data: [10,60,30],
+                description: "End-stage renal disease. Dialysis or transplant needed. Strict diet control."
+            }
+        };
+
+        // Navigation System
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            if(sectionId === 'visualization' && !pieChart) {
+                initializeChart();
+            }
+        }
+
+        // Chart Functions
+        function initializeChart() {
+            updateChart();
+        }
+
+        function updateChart() {
+            const stage = document.getElementById('stageSelector').value;
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            
+            if(pieChart) pieChart.destroy();
+            
+            pieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: stageData[stage].labels,
+                    datasets: [{
+                        data: stageData[stage].data,
+                        backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        datalabels: {
+                            formatter: (value) => `${value}%`,
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        },
+                        title: {
+                            display: true,
+                            text: `Stage ${stage} Recommended Food Distribution`
+                        }
+                    }
+                }
+            });
+        }
+
+        // PDF Generation
+        async function generatePDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Cover Page
+                doc.setFillColor(25, 118, 210);
+                doc.rect(0, 0, 210, 297, 'F');
+                doc.setFontSize(28);
+                doc.setTextColor(255);
+                doc.text("Chronic Kidney Disease", 105, 100, { align: 'center' });
+                doc.text("Nutrition Guide", 105, 120, { align: 'center' });
+                doc.addPage();
+
+                // Dietary Guidelines
+                doc.setFontSize(22);
+                doc.setTextColor(0);
+                doc.text("Dietary Guidelines", 15, 20);
+                doc.autoTable({
+                    html: '#diet-guide .food-table',
+                    startY: 30,
+                    theme: 'grid',
+                    headStyles: { fillColor: [76, 175, 80] },
+                    styles: { fontSize: 10 }
+                });
+
+                // Stage-wise Recommendations
+                doc.addPage();
+                doc.setFontSize(22);
+                doc.text("Stage-wise Recommendations", 15, 20);
+                
+                for(let stage = 1; stage <= 5; stage++) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 800;
+                    canvas.height = 600;
+                    const ctx = canvas.getContext('2d');
+                    
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: stageData[stage].labels,
+                            datasets: [{
+                                data: stageData[stage].data,
+                                backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0']
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value) => `${value}%`,
+                                    color: '#fff',
+                                    font: { weight: 'bold', size: 14 }
+                                }
+                            }
+                        }
+                    });
+
+                    const imgData = await new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve(canvas.toDataURL('image/png'));
+                        }, 500);
+                    });
+
+                    doc.setFontSize(16);
+                    doc.text(`Stage ${stage}: ${stageData[stage].title}`, 15, 30);
+                    doc.setFontSize(12);
+                    doc.text(stageData[stage].description, 15, 40);
+                    doc.addImage(imgData, 'PNG', 15, 50, 180, 100);
+                    
+                    if(stage !== 5) doc.addPage();
+                }
+
+                // Weight Guidelines
+                doc.addPage();
+                doc.setFontSize(22);
+                doc.text("Healthy Weight Guidelines", 15, 20);
+                doc.autoTable({
+                    html: '.weight-guidelines table',
+                    startY: 30,
+                    theme: 'grid',
+                    headStyles: { fillColor: [25, 118, 210] },
+                    styles: { fontSize: 10 }
+                });
+
+                // Affirmations
+                doc.setFontSize(16);
+                doc.text("Daily Affirmations", 15, doc.autoTable.previous.finalY + 15);
+                const affirmations = Array.from(document.querySelectorAll('.star-list li'))
+                                    .map(li => li.textContent.trim());
+                affirmations.forEach((text, index) => {
+                    doc.setFontSize(12);
+                    doc.text(`★ ${text}`, 20, doc.autoTable.previous.finalY + 25 + (index * 7));
+                });
+
+                // Disclaimer
+                doc.setFontSize(10);
+                doc.setTextColor(150);
+                doc.text("* This report is for informational purposes only. Always consult your doctor.", 
+                        15, 280, { maxWidth: 180 });
+
+                doc.save('CKD_Comprehensive_Report.pdf');
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('Error generating PDF. Please try again.');
+            }
+        }
+
+        // Initialize
+        window.onload = () => {
+            showSection('start-page');
+            initializeChart();
+        };
+    </script>
+</body>
+</html>
