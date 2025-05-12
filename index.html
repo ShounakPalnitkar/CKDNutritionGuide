@@ -286,34 +286,34 @@
         let pieChart = null;
         const stageData = {
             1: {
-                title: "Stage 1 (Mild Kidney Damage)",
-                labels: ['Proteins 30%', 'Vegetables 40%', 'Fruits 20%', 'Grains 10%'],
-                data: [30,40,20,10],
-                description: "Normal kidney function with some structural damage. Focus on maintaining kidney health through diet."
+                title: "Stage 1 (Kidney Damage with Normal Function)",
+                labels: ['Vegetables 50%', 'Grains 25%', 'Proteins 20%', 'Fruits 5%'],
+                data: [50,25,20,5],
+                description: "Focus on blood pressure control. Maintain moderate protein (0.8g/kg), emphasize low-sodium foods, and monitor blood sugar."
             },
             2: {
                 title: "Stage 2 (Mild CKD)",
-                labels: ['Proteins 25%', 'Vegetables 45%', 'Fruits 15%', 'Grains 15%'],
-                data: [25,45,15,15],
-                description: "Mildly reduced kidney function. Monitor protein intake and maintain hydration."
+                labels: ['Vegetables 52%', 'Grains 25%', 'Proteins 18%', 'Fruits 5%'],
+                data: [52,25,18,5],
+                description: "Begin mild protein restriction. Increase fiber-rich foods. Monitor potassium if bloodwork shows elevated levels."
             },
             3: {
                 title: "Stage 3 (Moderate CKD)",
-                labels: ['Proteins 20%', 'Vegetables 50%', 'Fruits 10%', 'Grains 20%'],
-                data: [20,50,10,20],
-                description: "Moderate kidney damage. Strict control of sodium, potassium, and phosphorus."
+                labels: ['Vegetables 55%', 'Grains 30%', 'Proteins 15%'],
+                data: [55,30,15],
+                description: "Moderate protein restriction (0.6g/kg). Limit phosphorus-rich foods. Choose low-potassium vegetables."
             },
             4: {
                 title: "Stage 4 (Severe CKD)",
-                labels: ['Proteins 15%', 'Vegetables 55%', 'Fruits 5%', 'Grains 25%'],
-                data: [15,55,5,25],
-                description: "Severely reduced kidney function. Prepare for potential dialysis."
+                labels: ['Vegetables 58%', 'Grains 30%', 'Proteins 12%'],
+                data: [58,30,12],
+                description: "Strict protein control. Limit dairy, nuts, and processed foods. Prepare for possible dialysis diet changes."
             },
             5: {
                 title: "Stage 5 (Kidney Failure)",
-                labels: ['Proteins 10%', 'Vegetables 60%', 'Grains 30%'],
-                data: [10,60,30],
-                description: "End-stage renal disease. Dialysis or transplant needed. Strict diet control."
+                labels: ['Vegetables 60%', 'Grains 30%', 'Proteins 10%'],
+                data: [60,30,10],
+                description: "Dialysis patients may need more protein. Strict fluid control. Individualized electrolyte management essential."
             }
         };
 
@@ -346,7 +346,7 @@
                     labels: stageData[stage].labels,
                     datasets: [{
                         data: stageData[stage].data,
-                        backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0'],
+                        backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0'],
                         borderWidth: 1
                     }]
                 },
@@ -360,7 +360,7 @@
                         },
                         title: {
                             display: true,
-                            text: `Stage ${stage} Recommended Food Distribution`
+                            text: stageData[stage].title
                         }
                     }
                 }
@@ -411,7 +411,7 @@
                             labels: stageData[stage].labels,
                             datasets: [{
                                 data: stageData[stage].data,
-                                backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0']
+                                backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0']
                             }]
                         },
                         options: {
